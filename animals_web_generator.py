@@ -12,34 +12,38 @@ def load_templates(template_path):
 
 
 def build_animals_string(data):
-    """ Build an animals string in HTML form """
     output = ""
 
     for animal in data:
         output += '<li class="cards__item">\n'
-        output += '  <div class="card__title">'
 
-        if "name" in animal:
-            output += f"{animal['name']}"
-        else:
-            output += "Unbekanntes Tier"
+        # Titel
+        name = animal.get("name", "Unbekanntes Tier")
+        output += f'  <div class="card__title">{name}</div>\n'
 
-        output += '</div>\n'
-        output += '  <div class="card__text">\n'
+        # Textblock starten
+        output += '  <p class="card__text">\n'
 
-        if "characteristics" in animal and "diet" in animal["characteristics"]:
-            output += f"Ernährung: {animal['characteristics']['diet']}<br>\n"
+        # Ernährung
+        diet = animal.get("characteristics", {}).get("diet")
+        if diet:
+            output += f'      <strong style="color:#444;">Diet:</strong> {diet}<br/>\n'
 
-        if "locations" in animal and len(animal["locations"]) > 0:
-            output += f"Ort: {animal['locations'][0]}<br>\n"
+        # Ort
+        locations = animal.get("locations", [])
+        if locations:
+            output += f'      <strong style="color:#444;">Location:</strong> {locations[0]}<br/>\n'
 
-        if "characteristics" in animal and "type" in animal["characteristics"]:
-            output += f"Typ: {animal['characteristics']['type']}<br>\n"
+        # Typ
+        type_ = animal.get("characteristics", {}).get("type")
+        if type_:
+            output += f'      <strong style="color:#444;">Type:</strong> {type_}<br/>\n'
 
-        output += "  </div>\n"
-        output += "</li>\n"
+        output += '  </p>\n'
+        output += '</li>\n'
 
     return output
+
 
 
 def write_output(html_content, output_path):
