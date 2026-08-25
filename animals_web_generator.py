@@ -12,27 +12,35 @@ def load_templates(template_path):
 
 
 def build_animals_string(data):
-    """ Build an animals string """
+    """ Build an animals string in HTML form """
     output = ""
 
     for animal in data:
-        # Name
+        output += '<li class="cards__item">\n'
+        output += '  <div class="card__title">'
+
         if "name" in animal:
-            output += f"Name: {animal['name']}\n"
+            output += f"{animal['name']}"
+        else:
+            output += "Unbekanntes Tier"
 
-        # Ernährung (diet)
+        output += '</div>\n'
+        output += '  <div class="card__text">\n'
+
         if "characteristics" in animal and "diet" in animal["characteristics"]:
-            output += f"Ernährung: {animal['characteristics']['diet']}\n"
+            output += f"Ernährung: {animal['characteristics']['diet']}<br>\n"
 
-        # Erster Ort
         if "locations" in animal and len(animal["locations"]) > 0:
-            output += f"Ort: {animal['locations'][0]}\n"
+            output += f"Ort: {animal['locations'][0]}<br>\n"
 
-        # Typ
         if "characteristics" in animal and "type" in animal["characteristics"]:
-            output += f"Typ: {animal['characteristics']['type']}\n"
+            output += f"Typ: {animal['characteristics']['type']}<br>\n"
+
+        output += "  </div>\n"
+        output += "</li>\n"
 
     return output
+
 
 def write_output(html_content, output_path):
     """ Write an HTML output """
