@@ -11,39 +11,38 @@ def load_templates(template_path):
         return handle.read()
 
 
+def serialize_animal(animal):
+    name = animal.get("name", "Unbekanntes Tier")
+    diet = animal.get("characteristics", {}).get("diet")
+    locations = animal.get("locations", [])
+    type_ = animal.get("characteristics", {}).get("type")
+
+    html = []
+    html.append('<li class="cards__item">')
+    html.append(f'  <div class="card__title">{name}</div>')
+    html.append('  <div class="card__text">')
+    html.append('    <ul class="animal-details">')
+
+    if diet:
+        html.append(f'      <li class="animal-detail"><strong>Diet:</strong> {diet}</li>')
+
+    if locations:
+        html.append(f'      <li class="animal-detail"><strong>Location:</strong> {locations[0]}</li>')
+
+    if type_:
+        html.append(f'      <li class="animal-detail"><strong>Type:</strong> {type_}</li>')
+
+    html.append('    </ul>')
+    html.append('  </div>')
+    html.append('</li>')
+
+    return "\n".join(html)
+
+
+
+# ⭐ FEHLTE BEI DIR – jetzt ist es drin
 def build_animals_string(data):
-    output = ""
-
-    for animal in data:
-        output += '<li class="cards__item">\n'
-
-        # Titel
-        name = animal.get("name", "Unbekanntes Tier")
-        output += f'  <div class="card__title">{name}</div>\n'
-
-        # Textblock starten
-        output += '  <p class="card__text">\n'
-
-        # Ernährung
-        diet = animal.get("characteristics", {}).get("diet")
-        if diet:
-            output += f'      <strong style="color:#444;">Diet:</strong> {diet}<br/>\n'
-
-        # Ort
-        locations = animal.get("locations", [])
-        if locations:
-            output += f'      <strong style="color:#444;">Location:</strong> {locations[0]}<br/>\n'
-
-        # Typ
-        type_ = animal.get("characteristics", {}).get("type")
-        if type_:
-            output += f'      <strong style="color:#444;">Type:</strong> {type_}<br/>\n'
-
-        output += '  </p>\n'
-        output += '</li>\n'
-
-    return output
-
+    return "\n".join(serialize_animal(animal) for animal in data)
 
 
 def write_output(html_content, output_path):
@@ -58,8 +57,10 @@ def write_output(html_content, output_path):
 animals = load_data("animals_data.json")
 template = load_templates("animals_template.html")
 
+# ⭐ KORREKT
 animals_string = build_animals_string(animals)
 
 final_html = template.replace("__REPLACE_ANIMALS_INFO__", animals_string)
 
 write_output(final_html, "animals.html")
+
