@@ -1,5 +1,10 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 import data_fetcher
+
+api_key = os.getenv("API_KEY")
 
 
 def load_templates(template_path):
@@ -50,7 +55,7 @@ def write_output(html_content, output_path):
 # Hauptprogramm
 # ---------------------
 
-api_key = "JhHpehCghmuA5akW8Jal2GvlzbuEtzsbdCIFFnrv"
+
 
 #Nutzer Abfrage
 tiername = input("Bitte gib ein Tiernamen ein: ")
@@ -78,5 +83,8 @@ template = load_templates("animals_template.html")
 final_html = template.replace("__REPLACE_ANIMALS_INFO__", animals_string)
 
 write_output(final_html, "animals.html")
+
+
+
 
 
