@@ -1,9 +1,18 @@
-import json
+import requests
 
-def load_data(file_path):
-    """ Load a JSON file"""
-    with open(file_path, "r", encoding="utf-8") as handle:
-        return json.load(handle)
+def load_data_from_api(tiername, api_key):
+    """ Holt Tierdaten von der API-Ninjas Animals API """
+    url = f"https://api.api-ninjas.com/v1/animals?name={tiername}"
+    headers = {"X-Api-Key": api_key}
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code != 200:
+        print("Fehler beim Abrufen der API:", response.status_code)
+        return []
+
+    return response.json()
+
 
 def load_templates(template_path):
     """ Load the HTML templates """
@@ -39,8 +48,6 @@ def serialize_animal(animal):
     return "\n".join(html)
 
 
-
-# ⭐ FEHLTE BEI DIR – jetzt ist es drin
 def build_animals_string(data):
     return "\n".join(serialize_animal(animal) for animal in data)
 
@@ -50,17 +57,22 @@ def write_output(html_content, output_path):
     with open(output_path, "w", encoding="utf-8") as handle:
         handle.write(html_content)
 
+
 # ---------------------
 # Hauptprogramm
 # ---------------------
 
-animals = load_data("animals_data.json")
+api_key = "JhHpehCghmuA5akW8Jal2GvlzbuEtzsbdCIFFnrv"
+
+# Statt JSON-Datei → API-Abfrage
+animals = load_data_from_api("fox", api_key)
+
 template = load_templates("animals_template.html")
 
-# ⭐ KORREKT
 animals_string = build_animals_string(animals)
 
 final_html = template.replace("__REPLACE_ANIMALS_INFO__", animals_string)
 
 write_output(final_html, "animals.html")
+
 
