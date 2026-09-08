@@ -64,8 +64,11 @@ def write_output(html_content, output_path):
 
 api_key = "JhHpehCghmuA5akW8Jal2GvlzbuEtzsbdCIFFnrv"
 
+#Nutzer Abfrage
+tiername = input("Bitte gib ein Tiernamen ein: ")
+
 # Statt JSON-Datei → API-Abfrage
-animals = load_data_from_api("fox", api_key)
+animals = load_data_from_api(tiername, api_key)
 
 template = load_templates("animals_template.html")
 
